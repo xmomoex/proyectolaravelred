@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,9 @@ Route::get('/', function () {
 
 
 Route::resource('/usuarios', UsuarioController::class);
+Route::delete('/usuarios/{id}', 'UsuarioController@destroy')->name('usuario.destroy');
+
+Route::resource('/posts', PostController::class);
 
 
 Route::view('/login', "login")->name('login');
@@ -30,7 +34,6 @@ Route::view('/privada', "secret")->middleware('auth')->name('privada');
 
 
 Route::post('/validar-registro', [LoginController::class, 'register'])->name('validar-registro');
-Route::post('validar-registro', [RegisterController::class, 'create'])->name('validar-registro');
 
 Route::post('/inicia-sesion', [LoginController::class, 'login'])->name('inicio-sesion');
 

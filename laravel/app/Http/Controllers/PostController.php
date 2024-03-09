@@ -1,95 +1,86 @@
 <?php
-/*
+
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
     public function index()
     {
-        $usuarios = Usuario::all();
-        return view('usuarios.index', compact('usuarios'));
+        $posts = Post::all();
+        return view('posts.index', compact('posts'));
     }
 
     public function create()
     {
-        return view('usuarios.create');
+        return view('posts.create');
     }
 
     public function store(Request $request)
     {
-        // Validar los datos del formulario
         $request->validate([
-            'nombre' => 'required|string|max:255',
-            'email' => 'required|email|unique:usuarios,email',
-            'descripcion' => 'required',
+            'titulo' => 'required',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'comentario' => 'required',
         ]);
 
-        // Crear el nuevo usuario con los datos validados
-        Usuario::create([
-            'nombre' => $request->input('nombre'),
-            'email' => $request->input('email'),
-            'descripcion' => $request->input('descripcion'),
-            // Asegúrate de que los nombres de campo coincidan con tu base de datos
+        $imageName = null;
+        if ($request->hasFile('imagen')) {
+            $imageName = time() . '.' . $request->imagen->extension();
+            $request->imagen->move(public_path('images'), $imageName);
+        }
+
+        Post::create([
+            'titulo' => $request->titulo,
+            'imagen' => $imageName,
+            'comentario' => $request->comentario,
         ]);
 
-        // Redirigir a alguna vista después de crear el usuario
-        return redirect()->route('usuarios.index')
-            ->withSuccess('Se ha creado un nuevo Usuario correctamente.');
+        return redirect()->route('posts.index')
+            ->with('success', 'Post creado exitosamente.');
+    }
+
+    public function edit(Post $post)
+    {
+        return view('posts.edit', compact('post'));
+    }
+
+    public function update(Request $request, Post $post)
+    {
+        $request->validate([
+            'titulo' => 'required',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'comentario' => 'required',
+        ]);
+
+        if ($request->hasFile('imagen')) {
+            $imageName = time() . '.' . $request->imagen->extension();
+            $request->imagen->move(public_path('images'), $imageName);
+            $post->imagen = $imageName;
+        }
+
+        $post->titulo = $request->titulo;
+        $post->comentario = $request->comentario;
+        $post->save();
+
+        return redirect()->route('posts.index')
+            ->with('success', 'Post actualizado exitosamente.');
+    }
+
+    public function destroy(Post $post)
+    {
+        $post->delete();
+
+        return redirect()->route('posts.index')
+            ->with('success', 'Post eliminado exitosamente.');
     }
 
     public function show($id)
     {
-        $usuario = Usuario::find($id);
-        return view('usuarios.show', compact('usuario'));
-    }
-
-    public function edit($id)
-    {
-        $usuario = Usuario::find($id);
-        return view('usuarios.edit', compact('usuario'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        // Validar los datos del formulario
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'email' => 'required|email|unique:usuarios,email,' . $id,
-            'descripcion' => 'required|unique:usuarios,descripcion,' . $id,
-            // Puedes agregar más reglas de validación según tus necesidades
-        ]);
-
-        // Buscar el usuario a actualizar
-        $usuario = Usuario::findOrFail($id);
-
-        // Actualizar los datos del usuario
-        $usuario->nombre = $request->input('nombre');
-        $usuario->email = $request->input('email');
-        $usuario->descripcion = $request->input('descripcion');
-        // Asegúrate de que el nombre de campo coincida con tu base de datos
-
-        // Guardar los cambios en la base de datos
-        $usuario->save();
-
-        // Redirigir a alguna vista después de actualizar el usuario
-        return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente.');
-    }
-
-
-    public function destroy($id)
-    {
-        // Buscar el usuario por su ID
-        $usuario = Usuario::findOrFail($id);
-
-        // Eliminar el usuario
-        $usuario->delete();
-
-        // Redirigir al usuario a la página correcta después de eliminar el usuario
-        return redirect()->route('usuarios.index')
-            ->with('success', 'El usuario ha sido eliminado correctamente.');
+        $post = Post::find($id);
+        return view('posts.show', compact('post'));
     }
 }
-*/

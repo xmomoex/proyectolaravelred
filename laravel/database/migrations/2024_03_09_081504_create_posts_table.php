@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('titulo');
             $table->string('imagen')->nullable();
-            $table->string('cometario');
+            $table->string('comentario');
             $table->timestamps();
         });
     }

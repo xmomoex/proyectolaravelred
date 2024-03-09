@@ -1,4 +1,4 @@
-<!-- resources/views/auth/login.blade.php -->
+@extends('layouts.app')
 <main class="container align-center p-5">
     <form action="{{route('inicio-sesion')}}" method="post">
         @csrf
