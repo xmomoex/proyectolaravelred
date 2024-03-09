@@ -49,7 +49,7 @@ class LoginController extends Controller
 
             return redirect()->intended(route('privada'));
         } else {
-            return redirect('usuarios.login');
+            return redirect('login');
         }
     }
 
@@ -60,6 +60,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect(route('usuarios.login'));
+        return redirect(route('login'));
     }
 }

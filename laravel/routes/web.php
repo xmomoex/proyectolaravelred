@@ -27,9 +27,9 @@ Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuari
 Route::delete('/usuarios/{id}', [UsuarioController::class, 'destroy'])->name('usuario.destroy');
 
 
-
-
-Route::get('/login', [LoginController::class, 'login'])->name('usuarios.login');
+Route::view('/login', "login")->name('login');
+Route::view('/registro', "register")->name('registro');
+Route::view('/privada', "secret")->middleware('auth')->name('privada');
 
 
 Route::post('/validar-registro', [LoginController::class, 'register'])->name('validar-registro');

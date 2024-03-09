@@ -15,7 +15,7 @@
             <label for="rememberCheck" class="form-check-label">Mantener sesión iniciada</label>
         </div>
         <div>
-            <p>¿No tienes cuenta? <a href="{{route('usuarios.registro')}}">
+            <p>¿No tienes cuenta? <a href="{{route('registro')}}">
                     Registrate
                 </a></p>
         </div>
