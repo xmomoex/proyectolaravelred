@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,6 +30,7 @@ Route::view('/privada', "secret")->middleware('auth')->name('privada');
 
 
 Route::post('/validar-registro', [LoginController::class, 'register'])->name('validar-registro');
+Route::post('validar-registro', [RegisterController::class, 'create'])->name('validar-registro');
 
 Route::post('/inicia-sesion', [LoginController::class, 'login'])->name('inicio-sesion');
 
