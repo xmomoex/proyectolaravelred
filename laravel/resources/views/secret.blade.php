@@ -13,5 +13,4 @@
         <article class="container">
             <h2>Tu seccion Privada</h2>
         </article>
-
     </div>
