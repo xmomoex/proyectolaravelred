@@ -26,13 +26,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::resource('/usuarios', UsuarioController::class);
+    Route::delete('/usuarios/{id}', 'UsuarioController@destroy')->name('usuario.destroy');
 
-Route::resource('/usuarios', UsuarioController::class);
-Route::delete('/usuarios/{id}', 'UsuarioController@destroy')->name('usuario.destroy');
-
-Route::resource('/posts', PostController::class);
-
-
+    Route::resource('/posts', PostController::class);
+});
 Route::view('/login', "login")->name('login');
 Route::view('/registro', "register")->name('registro');
 Route::view('/privada', "secret")->middleware('auth')->name('privada');
